@@ -115,7 +115,7 @@ if (selchar === "aabei") {
     selchar = "strange";
     localStorage.setItem("aabei_char", "strange");
 }
-var selvol = localStorage.getItem("aabei_vol") || "aabei";
+var selvol = localStorage.getItem("aabei_vol") || charvol[selchar][0];
 document.getElementById("img1").src = "img/img1.jpg";
 
 character.value = selchar;
