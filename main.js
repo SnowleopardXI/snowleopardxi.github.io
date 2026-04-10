@@ -154,7 +154,7 @@ try {
     if (_cachedMP3) {
         cacheOk.innerHTML = "✅";
     } else {
-        downloadAndCacheMP3(filename);
+        downloadAndCacheMP3(_filename);
     }
 } catch (error) { console.warn(error); }
 onload = function () {
@@ -185,17 +185,13 @@ function downloadAndCacheMP3(filename, pl = false) {
     cacheOk.innerHTML = "🔄";
     fetch(filename)
         .then(response => {
-            const contentType = response.headers.get('Content-Type');
-            if (contentType && (contentType.startsWith('audio/mpeg') || contentType.startsWith('audio/mp3'))) {
-                return response.blob();
-            } else {
+            if (!response.ok) {
                 cacheOk.innerHTML = "❌";
                 testButton.disabled = false;
                 // window.inob = false;
-                setTimeout(function () {
-                    alert("音频加载失败，请刷新页面重试");
-                }, 300);
+                throw new Error(`音频加载失败 (${response.status})`);
             }
+            return response.blob();
         })
         .then((blob) => {
             const reader = new FileReader();
